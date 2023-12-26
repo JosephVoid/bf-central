@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  auth:
+    build: 
+      context: ./auth
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - springapimysql-net
+    depends_on:
+      - mysqldb
+  mysqldb:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3307:3306
+    networks:
+      - springapimysql-net  
+    environment:
+      MYSQL_DATABASE: buyersfirstdb
+      MYSQL_ROOT_PASSWORD: dev_root
+    volumes:
+      - mysql:/var/lib/mysql
+networks:
+  springapimysql-net:
+volumes:
+  mysql:
