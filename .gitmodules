@@ -1,3 +1,4 @@
 [submodule "bf-auth"]
 	path = bf-auth
 	url = https://github.com/JosephVoid/bf-auth.git
+	branch = main
