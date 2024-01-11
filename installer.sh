@@ -1,23 +1,3 @@
-# CORE
-# DB_URL=jdbc:mysql://mysqldb:3306/buyersfirstdb
-# DB_USER=root
-# DB_PASS=dev_root
-# JWT_ISS=BUYERSFIRST
-# JWT_SEC=sect_1234
-# JWT_EXP=10080
-# RDS_HST=
-# RDS_PRT=
-# RDS_PSW=
-# RDS_USR=
-
-####
-# AUTH
-# DB_URL=jdbc:mysql://mysqldb:3306/buyersfirstdb
-# DB_USER=root
-# DB_PASS=dev_root
-# JWT_ISS=BUYERSFIRST
-# JWT_SEC=sect_1234
-# JWT_EXP=10080
 
 echo -e "
 ██████╗ ██╗   ██╗██╗   ██╗███████╗██████╗ ███████╗    ███████╗██╗██████╗ ███████╗████████╗
@@ -35,9 +15,9 @@ read -p "Enter MySQL DB USER (Press Enter for root): " db_user;
 read -p "Enter MySQL DB PASSWORD: " db_pass;
 read -p "Enter JWT Issuer (Press Enter for BUYERSFIRST): " jwt_iss;
 read -p "Enter JWT Secret : " jwt_sec;
-read -p "Enter JWT Expiry: " jwt_exp;
-read -p "Enter REDIS Host : " rds_host;
-read -p "Enter REDIS Port : " rds_port;
+read -p "Enter JWT Expiry (Press Enter for 10080): " jwt_exp;
+read -p "Enter REDIS Host (Press Enter for redis): " rds_host;
+read -p "Enter REDIS Port (Press Enter for 6379): " rds_port;
 read -p "Enter REDIS Passowrd : " rds_pass;
 
 if [[ -z "$db_url" ]]; then
@@ -50,6 +30,18 @@ fi
 
 if [[ -z "$jwt_iss" ]]; then
     jwt_iss="BUYERSFIRST";
+fi
+
+if [[ -z "$jwt_exp" ]]; then
+    jwt_exp="10080";
+fi
+
+if [[ -z "$rds_host" ]]; then
+    rds_host="redis";
+fi
+
+if [[ -z "$rds_port" ]]; then
+    rds_port="6379";
 fi
 
 db_name=$(echo "${db_url##*/}")
