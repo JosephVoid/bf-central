@@ -77,6 +77,9 @@ DB_PASS=$db_pass
 REDIS_PASS=$rds_pass
 " > .env
 
+# Remove application.properties file [bc it smh overrides the application-docker.properties]
+rm auth/src/main/resources/application.properties
+rm core/src/main/resources/application.properties
 # Build images and Containers
 docker compose build
 
