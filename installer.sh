@@ -17,6 +17,7 @@ read -p "Enter JWT Issuer (Press Enter for BUYERSFIRST): " jwt_iss;
 read -p "Enter JWT Secret : " jwt_sec;
 read -p "Enter JWT Expiry (Press Enter for 10080): " jwt_exp;
 read -p "Enter REDIS Host (Press Enter for redis): " rds_host;
+read -p "Enter REDIS User (Press Enter for default): " rds_user;
 read -p "Enter REDIS Port (Press Enter for 6379): " rds_port;
 read -p "Enter REDIS Passowrd : " rds_pass;
 
@@ -44,6 +45,10 @@ if [[ -z "$rds_port" ]]; then
     rds_port="6379";
 fi
 
+if [[ -z "$rds_user" ]]; then
+    rds_user="default";
+fi
+
 db_name=$(echo "${db_url##*/}")
 
 # Clone all the submodules
@@ -60,7 +65,7 @@ JWT_EXP=$jwt_exp
 RDS_HST=$rds_host
 RDS_PRT=$rds_port
 RDS_PSW=$rds_pass
-RDS_USR=" > core/src/main/resources/docker.secret.properties
+RDS_USR=$rds_user" > core/src/main/resources/docker.secret.properties
 
 # ## For the auth repo
 echo "DB_URL=$db_url
