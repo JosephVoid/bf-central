@@ -23,6 +23,17 @@ services:
     depends_on:
       - mysqldb
       - redis
+  file:
+    build: 
+      context: ./file
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8082:8080
+    networks:
+      - bf-net
+    volumes:
+      - storage:/home/storage
   mysqldb:
     image: "mysql:8.0"
     restart: always
@@ -52,3 +63,4 @@ networks:
 volumes:
   mysql:
   redis:
+  storage:
