@@ -34,6 +34,17 @@ services:
       - bf-net
     volumes:
       - storage:/home/storage
+  chat:
+    build: 
+      context: ./chat
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8083:4000
+    networks:
+      - bf-net
+    depends_on:
+      - mysqldb
   mysqldb:
     image: "mysql:8.0"
     restart: always
