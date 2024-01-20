@@ -11,3 +11,7 @@
 	path = file
 	url = https://github.com/JosephVoid/bf-file.git
 	branch = main
+[submodule "chat"]
+	path = chat
+	url = https://github.com/JosephVoid/bf-chat.git
+	branch = main
