@@ -22,6 +22,8 @@ read -p "Enter REDIS Host (Press Enter for redis): " rds_host;
 read -p "Enter REDIS User (Press Enter for default): " rds_user;
 read -p "Enter REDIS Port (Press Enter for 6379): " rds_port;
 read -p "Enter REDIS Password : " rds_pass;
+read -p "Enter RABBITMQ User (Press Enter for buyersfirst): " mq_user;
+read -p "Enter RABBITMQ Password : " mq_pass;
 
 if [[ -z "$db_url" ]]; then
     db_url="jdbc:mysql://mysqldb:3306/buyersfirstdb";
@@ -53,6 +55,10 @@ fi
 
 if [[ -z "$rds_user" ]]; then
     rds_user="default";
+fi
+
+if [[ -z "$mq_user" ]]; then
+    mq_user="buyersfirst";
 fi
 
 db_name=$(echo "${db_url##*/}")
@@ -101,6 +107,8 @@ JWT_SEC=$jwt_sec
 echo "DB_NAME=$db_name
 DB_PASS=$db_pass
 REDIS_PASS=$rds_pass
+MQ_USER=$mq_user
+MQ_PASS=$mq_pass
 " > .env
 
 # Remove application.properties file [bc it smh overrides the application-docker.properties]

@@ -69,9 +69,23 @@ services:
       - bf-net
     environment:
       - REDIS_PASSWORD=${REDIS_PASS}
+  rabbitmq:
+    hostname: rabbitmq
+    image: rabbitmq:latest
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - queue:/var/lib/rabbitmq
+    networks:
+      - bf-net
+    environment:
+      - RABBITMQ_DEFAULT_USER=${MQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${MQ_PASS}
 networks:
   bf-net:
 volumes:
   mysql:
   redis:
   storage:
+  queue:
