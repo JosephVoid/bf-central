@@ -45,6 +45,15 @@ services:
       - bf-net
     depends_on:
       - mysqldb
+  notif:
+    build: 
+      context: ./notif
+      dockerfile: dockerfile
+    restart: always
+    networks:
+      - bf-net
+    depends_on:
+      - rabbitmq
   mysqldb:
     image: "mysql:8.0"
     restart: always

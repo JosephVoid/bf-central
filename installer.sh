@@ -22,8 +22,15 @@ read -p "Enter REDIS Host (Press Enter for redis): " rds_host;
 read -p "Enter REDIS User (Press Enter for default): " rds_user;
 read -p "Enter REDIS Port (Press Enter for 6379): " rds_port;
 read -p "Enter REDIS Password : " rds_pass;
+read -p "Enter RABBITMQ Host (Press Enter for rabbitmq): " mq_host;
 read -p "Enter RABBITMQ User (Press Enter for buyersfirst): " mq_user;
 read -p "Enter RABBITMQ Password : " mq_pass;
+read -p "Enter the email queue (Press Enter for email_q): " mq_email_q;
+read -p "Enter the sms queue (Press Enter for sms_q): " mq_sms_q;
+read -p "Enter mail server: " email_srv;
+read -p "Enter user email: " email_usr;
+read -p "Enter user password: " email_pss;
+read -p "Enter mail server port: " email_prt;
 
 if [[ -z "$db_url" ]]; then
     db_url="jdbc:mysql://mysqldb:3306/buyersfirstdb";
@@ -59,6 +66,18 @@ fi
 
 if [[ -z "$mq_user" ]]; then
     mq_user="buyersfirst";
+fi
+
+if [[ -z "$mq_host" ]]; then
+    mq_host="rabbitmq";
+fi
+
+if [[ -z "$mq_email_q" ]]; then
+    mq_email_q="email_q";
+fi
+
+if [[ -z "$mq_sms_q" ]]; then
+    mq_sms_q="sms_q";
 fi
 
 db_name=$(echo "${db_url##*/}")
@@ -102,6 +121,20 @@ DB_PASS=$db_pass
 DB_NAME=$db_name
 JWT_SEC=$jwt_sec
 " > chat/.env
+
+# ## For the notif repo
+echo "RBT_MQ=$mq_host
+RBT_MQ_USER=$mq_user
+RBT_MQ_PASS=$mq_pass
+RBT_MQ_EMLQ=$mq_email_q
+RBT_MQ_SMSQ=$mq_sms_q
+SMS_URL=https://sms.capcom.me/api/3rdparty/v1/message
+SMS_USR=VXDAZ9
+SMS_PSS=i9xr12qfusf445
+EML_USR=$email_usr
+EML_PSS=$email_pss
+EML_PRT=$email_prt
+EML_SRV=$email_srv" > notif/.env
 
 ## For the .env
 echo "DB_NAME=$db_name

@@ -15,3 +15,7 @@
 	path = chat
 	url = https://github.com/JosephVoid/bf-chat.git
 	branch = main
+[submodule "notif"]
+	path = notif
+	url = https://github.com/JosephVoid/bf-notif.git
+	branch = main
