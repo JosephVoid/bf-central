@@ -19,3 +19,7 @@
 	path = notif
 	url = https://github.com/JosephVoid/bf-notif.git
 	branch = main
+[submodule "web"]
+	path = web
+	url = https://github.com/JosephVoid/bf-web.git
+	branch = main
