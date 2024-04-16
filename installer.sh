@@ -25,6 +25,10 @@ read -p "Enter REDIS Password : " rds_pass;
 read -p "Enter RABBITMQ Host (Press Enter for rabbitmq): " mq_host;
 read -p "Enter RABBITMQ User (Press Enter for buyersfirst): " mq_user;
 read -p "Enter RABBITMQ Password : " mq_pass;
+read -p "Enter MINIO Host (Press Enter for minio): " minio_host;
+read -p "Enter MINIO User (Press Enter for buyersfirst): " minio_user;
+read -p "Enter MINIO Bucket (Press Enter for images): " minio_bucket;
+read -p "Enter MINIO Password : " minio_pass;
 read -p "Enter the email queue (Press Enter for email_q): " mq_email_q;
 read -p "Enter the sms queue (Press Enter for sms_q): " mq_sms_q;
 read -p "Enter mail server: " email_srv;
@@ -72,6 +76,18 @@ if [[ -z "$mq_host" ]]; then
     mq_host="rabbitmq";
 fi
 
+if [[ -z "$minio_host" ]]; then
+    minio_host="minio";
+fi
+
+if [[ -z "$minio_user" ]]; then
+    minio_user="buyersfirst";
+fi
+
+if [[ -z "$minio_bucket" ]]; then
+    minio_bucket="images";
+fi
+
 if [[ -z "$mq_email_q" ]]; then
     mq_email_q="email_q";
 fi
@@ -87,9 +103,9 @@ git submodule update -i
 
 # Update the submodules
 cd auth ; git checkout main ; git pull ; cd ..
-cd chat ; git checkout main ; git pull ; cd ..
 cd core ; git checkout main ; git pull ; cd ..
-cd file ; git checkout main ; git pull ; cd ..
+cd web ; git checkout main ; git pull ; cd ..
+cd notif ; git checkout main ; git pull ; cd ..
 
 # Generate and place the secret files
 ## For the core repo
@@ -113,14 +129,15 @@ JWT_SEC=$jwt_sec
 JWT_EXP=$jwt_exp
 " > auth/src/main/resources/docker.secret.properties
 
-# ## For the chat repo
-echo "PORT=4000
-DB_HOST=$db_host
-DB_USER=$db_user
-DB_PASS=$db_pass
-DB_NAME=$db_name
-JWT_SEC=$jwt_sec
-" > chat/.env
+# ## For the web repo
+echo "NEXT_PUBLIC_AUTH_BASE_URL=http://auth:8080
+NEXT_PUBLIC_CORE_BASE_URL=http://core:8081
+NEXT_PUBLIC_MINIO_URL=$minio_host
+NEXT_PUBLIC_MINIO_PORT=9000
+NEXT_PUBLIC_MINIO_ACSK=
+NEXT_PUBLIC_MINIO_SECK=
+NEXT_PUBLIC_MINIO_BUCKET=$minio_bucket
+NEXT_PUBLIC_MINIO_PROT=http" > web/.env
 
 # ## For the notif repo
 echo "RBT_MQ=$mq_host
@@ -142,12 +159,15 @@ DB_PASS=$db_pass
 REDIS_PASS=$rds_pass
 MQ_USER=$mq_user
 MQ_PASS=$mq_pass
+MINIO_USER=$minio_user
+MINIO_PASS=$minio_pass
+MINIO_BUCKET=$minio_bucket
 " > .env
 
 # Remove application.properties file [bc it smh overrides the application-docker.properties]
 rm auth/src/main/resources/application.properties
 rm core/src/main/resources/application.properties
-rm file/src/main/resources/application.properties
+
 # Build images and Containers
 docker compose build
 

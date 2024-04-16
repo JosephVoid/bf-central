@@ -23,28 +23,30 @@ services:
     depends_on:
       - mysqldb
       - redis
-  file:
+  web:
     build: 
-      context: ./file
+      context: ./web
       dockerfile: dockerfile
     restart: always
     ports:
-      - 8082:8080
-    networks:
-      - bf-net
-    volumes:
-      - storage:/home/storage
-  chat:
-    build: 
-      context: ./chat
-      dockerfile: dockerfile
-    restart: always
-    ports:
-      - 8083:4000
+      - 8082:3000
     networks:
       - bf-net
     depends_on:
-      - mysqldb
+      - auth
+      - core
+      - minio
+  # chat:
+  #   build: 
+  #     context: ./chat
+  #     dockerfile: dockerfile
+  #   restart: always
+  #   ports:
+  #     - 8083:4000
+  #   networks:
+  #     - bf-net
+  #   depends_on:
+  #     - mysqldb
   notif:
     build: 
       context: ./notif
@@ -91,10 +93,24 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=${MQ_USER}
       - RABBITMQ_DEFAULT_PASS=${MQ_PASS}
+  minio:
+    hostname: minio
+    image: minio:latest
+    ports:
+      -"9000:9000"
+      -"9001:9001"
+    volumes:
+      - minio:/data
+    networks:
+      - bf-net
+    environment:
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASS}
+      - MINIO_DEFAULT_BUCKETS=${MINIO_BUCKET}
 networks:
   bf-net:
 volumes:
   mysql:
   redis:
-  storage:
+  minio:
   queue:
